@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center; 
+      flex-direction: column;
+      height: 100vh;          
+      margin: 0; 
+    }
+    h2 {
+      text-align: center;
+      color: white;
+      margin-bottom: 25px;
+      margin-top: 15px;
+    }
+    .main {
+      background-color: #222;
+      border-radius: 15px;   
+      padding: 20px;      
+      color: white;
+      max-width: 275px;
+      width: 100%;
+    }
+    .container1,.container2,.container3,.container4,.resetContainer {
+      margin-bottom: 8px;
+    }
+    button {
+      font-size: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      border: none;
+      background-color: rgb(51, 50, 50);
+      color: white;
+      margin-right: 5px;
+    }
+    button:hover {
+      background-color: #666;
+    }
+    .reset {
+      font-size: 18px;
+    }
+    .add,.sub,.multiply,.divide {
+      background-color: orange;
+    }
+    .add:hover,.sub:hover,.multiply:hover,.divide:hover{
+      background-color: rgb(255, 200, 0);
+    }
+    .screen {
+      height: 40px;
+      margin: 8px 2px 5px 8px;
+      font-size: 35px;
+      color: white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <h2>Arithmetic Calculator</h2>
+  <div class="main">
+    <p class="screen"></p>
+    <div class="container1">
+      <button onclick="performCalculation(1)">1</button>
+      <button onclick="performCalculation(2)">2</button>
+      <button onclick="performCalculation(3)">3</button>
+      <button class="add" onclick="performCalculation('+')">&plus;</button>
+    </div>
+    <div class="container2">
+      <button onclick="performCalculation(4)">4</button>
+      <button onclick="performCalculation(5)">5</button>
+      <button onclick="performCalculation(6)">6</button>
+      <button class="sub" onclick="performCalculation('-')">&minus;</button>
+    </div>
+    <div class="container3">
+      <button onclick="performCalculation(7)">7</button>
+      <button onclick="performCalculation(8)">8</button>
+      <button onclick="performCalculation(9)">9</button>
+      <button class="multiply" onclick="performCalculation('*')">&#xd7;</button>
+    </div>
+    <div class="container4">
+      <button onclick="performCalculation(0)">0</button>
+      <button onclick="performCalculation('.')">.</button>
+      <button class="equal" onclick="calculateResult()">&#61;</button>
+      <button class="divide" onclick="performCalculation('/')">&div;</button>
+    </div>
+    <div class="resetContainer">
+      <button class="reset" onclick="clearScreen()">Clear</button>
+    </div>
+  </div>
+  <script>
+    let calculation = '';
+    function performCalculation(button) {
+      calculation += button;
+      document.querySelector('.screen').innerHTML = calculation;
+    }
+    function calculateResult() {
+      try {
+        if (/(\.\.|[+\-*/]{2,}|^[*/.]|[+\-*/.]$)/.test(calculation)) {
+          document.querySelector('.screen').innerHTML = "ERROR";
+          calculation = '';
+          return;
+        }
+        calculation = eval(calculation).toString();
+        document.querySelector('.screen').innerHTML = calculation;
+      } catch {
+        document.querySelector('.screen').innerHTML = "ERROR";
+        calculation = '';
+      }
+    }
+    function clearScreen() {
+      calculation = '';
+      document.querySelector('.screen').innerHTML = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const validKeys = '0123456789.+-*/';
+      if (validKeys.includes(e.key)) {
+        performCalculation(e.key);
+      } else if (e.key === 'Enter' || e.key === '=') {
+        e.preventDefault();
+        calculateResult();
+      } else if (e.key === 'Backspace') {
+        calculation = calculation.slice(0, -1);
+        document.querySelector('.screen').innerHTML = calculation;
+      } else if (e.key === 'Escape') {
+        clearScreen();
+      }
+    });
+  </script>
+</body>
+</html>
